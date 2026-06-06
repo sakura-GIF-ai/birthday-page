@@ -213,8 +213,16 @@ button {
   background: rgba(24, 18, 28, 0.68);
   box-shadow: 0 0.8rem 1.6rem rgba(0, 0, 0, 0.28);
   backdrop-filter: blur(16px);
+  opacity: 0;
+  pointer-events: none;
   transform: translateY(-50%) translateZ(0);
+  transition: opacity 260ms ease, transform 260ms ease;
   will-change: transform;
+}
+
+.page.is-open .music-toggle {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .music-bars {
