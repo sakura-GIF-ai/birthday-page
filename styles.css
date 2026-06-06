@@ -167,12 +167,13 @@ button {
 
 .surprise {
   display: grid;
-  align-content: center;
+  align-content: start;
   justify-items: center;
   gap: 1.4rem;
   visibility: hidden;
   opacity: 0;
   transform: translateY(1.5rem);
+  overflow-y: auto;
   transition: opacity 800ms ease 300ms, transform 800ms ease 300ms, visibility 800ms ease 300ms;
 }
 
@@ -180,6 +181,21 @@ button {
   visibility: visible;
   opacity: 1;
   transform: translateY(0);
+}
+
+.page.is-open .surprise::after {
+  position: fixed;
+  left: 50%;
+  bottom: max(0.9rem, env(safe-area-inset-bottom));
+  z-index: 5;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-right: 1px solid rgba(245, 213, 148, 0.72);
+  border-bottom: 1px solid rgba(245, 213, 148, 0.72);
+  content: "";
+  pointer-events: none;
+  transform: translateX(-50%) rotate(45deg);
+  animation: floatingScrollHint 1.7s ease-in-out infinite;
 }
 
 .music-toggle {
@@ -313,6 +329,19 @@ button {
 .message {
   width: min(31rem, 100%);
   text-align: center;
+}
+
+.message::after {
+  display: block;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin: 1.1rem auto 0;
+  border-right: 1px solid rgba(245, 213, 148, 0.6);
+  border-bottom: 1px solid rgba(245, 213, 148, 0.6);
+  content: "";
+  opacity: 0.72;
+  transform: rotate(45deg);
+  animation: scrollHint 1.7s ease-in-out infinite;
 }
 
 .message h2 {
@@ -786,7 +815,68 @@ button {
   }
 
   .surprise {
+    align-content: center;
     gap: 1.8rem;
+    overflow-y: hidden;
+  }
+
+  .page.is-open .surprise::after {
+    display: none;
+  }
+}
+
+@media (max-width: 719px) {
+  .surprise {
+    gap: 0.85rem;
+    padding-top: max(0.85rem, env(safe-area-inset-top));
+  }
+
+  .cake {
+    width: min(9.8rem, 44vw);
+    height: 7.6rem;
+    margin-top: -0.35rem;
+  }
+
+  .cake-body {
+    bottom: 0.5rem;
+    width: 7.5rem;
+    height: 3rem;
+  }
+
+  .cake-top {
+    bottom: 3.2rem;
+    width: 8.35rem;
+    height: 1.55rem;
+  }
+
+  .candle {
+    bottom: 4.82rem;
+    height: 1.7rem;
+  }
+
+  .flame {
+    bottom: 6.35rem;
+    width: 0.88rem;
+    height: 1.2rem;
+  }
+
+  .message h2 {
+    margin-bottom: 0.85rem;
+    font-size: clamp(1.55rem, 7.4vw, 2.25rem);
+  }
+
+  .wishes {
+    gap: 0.54rem;
+  }
+
+  .wishes p {
+    font-size: clamp(0.92rem, 3.8vw, 1.05rem);
+    line-height: 1.66;
+  }
+
+  .video-letter,
+  .wish-draw {
+    margin-top: 1.15rem;
   }
 }
 
@@ -870,6 +960,30 @@ button {
 @keyframes musicBars {
   50% {
     transform: scaleY(0.52);
+  }
+}
+
+@keyframes scrollHint {
+  0%,
+  100% {
+    opacity: 0.32;
+    transform: translateY(0) rotate(45deg);
+  }
+  50% {
+    opacity: 0.86;
+    transform: translateY(0.35rem) rotate(45deg);
+  }
+}
+
+@keyframes floatingScrollHint {
+  0%,
+  100% {
+    opacity: 0.26;
+    transform: translate(-50%, 0) rotate(45deg);
+  }
+  50% {
+    opacity: 0.88;
+    transform: translate(-50%, 0.36rem) rotate(45deg);
   }
 }
 

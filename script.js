@@ -4,6 +4,7 @@ const opening = document.querySelector("#opening");
 const surprise = document.querySelector("#surprise");
 const music = document.querySelector("#birthdayMusic");
 const musicToggle = document.querySelector("#musicToggle");
+const blessingVideo = document.querySelector(".blessing-video");
 const fortuneStage = document.querySelector("#fortuneStage");
 const drawButton = document.querySelector("#drawButton");
 const fortuneCard = document.querySelector("#fortuneCard");
@@ -63,74 +64,142 @@ function resizeCanvas() {
 }
 
 function pickSparkColor() {
-  const colors = ["245, 213, 148", "241, 202, 208", "255, 247, 237", "216, 161, 174"];
+  const colors = [
+    "255, 239, 180",
+    "245, 213, 148",
+    "255, 247, 237",
+    "241, 202, 208",
+    "216, 161, 174"
+  ];
   return colors[Math.floor(Math.random() * colors.length)];
 }
 
-function createParticle(x, y, burst = false) {
-  const angle = Math.random() * Math.PI * 2;
-  const speed = burst ? 2.2 + Math.random() * 4.2 : 0.18 + Math.random() * 0.35;
+function createParticle(x, y, options = {}) {
+  const burst = options.burst || false;
+  const angle = options.angle ?? Math.random() * Math.PI * 2;
+  const speed = options.speed ?? (burst ? 1.8 + Math.random() * 3.2 : 0.12 + Math.random() * 0.3);
 
   return {
     x,
     y,
+    prevX: x,
+    prevY: y,
     vx: Math.cos(angle) * speed,
-    vy: Math.sin(angle) * speed - (burst ? 0.4 : 0),
-    size: burst ? 1.25 + Math.random() * 2.65 : 0.7 + Math.random() * 1.5,
-    life: burst ? 95 + Math.random() * 45 : 140 + Math.random() * 90,
-    maxLife: burst ? 140 : 230,
-    color: pickSparkColor()
+    vy: Math.sin(angle) * speed - (burst ? 0.2 : 0),
+    size: options.size ?? (burst ? 1 + Math.random() * 2 : 0.7 + Math.random() * 1.3),
+    life: options.life ?? (burst ? 76 + Math.random() * 44 : 150 + Math.random() * 80),
+    maxLife: options.maxLife ?? (burst ? 120 : 230),
+    gravity: options.gravity ?? (burst ? 0.025 : 0.006),
+    friction: options.friction ?? (burst ? 0.982 : 1),
+    trail: options.trail ?? burst,
+    color: options.color ?? pickSparkColor()
   };
 }
 
 function seedParticles() {
-  particles = Array.from({ length: 52 }, () =>
+  particles = Array.from({ length: 44 }, () =>
     createParticle(Math.random() * window.innerWidth, Math.random() * window.innerHeight)
   );
 }
 
-function addBurst(
+function addGoldBurst(
   x = window.innerWidth * (0.22 + Math.random() * 0.56),
-  y = window.innerHeight * (0.18 + Math.random() * 0.25),
-  size = 48
+  y = window.innerHeight * (0.16 + Math.random() * 0.28),
+  size = 62
 ) {
   for (let index = 0; index < size; index += 1) {
-    particles.push(createParticle(x, y, true));
+    const angle = (Math.PI * 2 * index) / size + (Math.random() - 0.5) * 0.2;
+    const ring = index % 3;
+    particles.push(
+      createParticle(x, y, {
+        burst: true,
+        angle,
+        speed: 1.45 + ring * 0.72 + Math.random() * 1.25,
+        size: 0.9 + ring * 0.36 + Math.random() * 1.15,
+        life: 92 + Math.random() * 42,
+        maxLife: 138,
+        gravity: 0.018 + ring * 0.004,
+        friction: 0.982,
+        color: pickSparkColor()
+      })
+    );
+  }
+
+  for (let index = 0; index < 18; index += 1) {
+    particles.push(
+      createParticle(x, y, {
+        burst: true,
+        speed: 0.45 + Math.random() * 1.2,
+        size: 2.2 + Math.random() * 1.8,
+        life: 42 + Math.random() * 24,
+        maxLife: 66,
+        gravity: 0.01,
+        friction: 0.96,
+        trail: false,
+        color: "255, 247, 237"
+      })
+    );
   }
 }
 
 function showFireworks() {
   const points = [
-    [window.innerWidth * 0.24, window.innerHeight * 0.2],
-    [window.innerWidth * 0.68, window.innerHeight * 0.18],
+    [window.innerWidth * 0.22, window.innerHeight * 0.18],
+    [window.innerWidth * 0.72, window.innerHeight * 0.2],
     [window.innerWidth * 0.5, window.innerHeight * 0.29]
   ];
 
   points.forEach(([x, y], index) => {
-    window.setTimeout(() => addBurst(x, y, index === 2 ? 70 : 54), index * 220);
+    window.setTimeout(() => addGoldBurst(x, y, index === 2 ? 82 : 64), index * 260);
   });
 
-  for (let index = 0; index < 24; index += 1) {
-    particles.push(createParticle(window.innerWidth / 2, window.innerHeight * 0.62, true));
-  }
+  window.setTimeout(() => {
+    const baseY = Math.min(window.innerHeight * 0.72, window.innerHeight - 90);
+    for (let index = 0; index < 34; index += 1) {
+      particles.push(
+        createParticle(window.innerWidth * (0.24 + Math.random() * 0.52), baseY, {
+          burst: true,
+          angle: -Math.PI / 2 + (Math.random() - 0.5) * 0.65,
+          speed: 1.6 + Math.random() * 2.2,
+          size: 0.9 + Math.random() * 1.3,
+          life: 70 + Math.random() * 32,
+          maxLife: 110,
+          gravity: 0.026,
+          color: pickSparkColor()
+        })
+      );
+    }
+  }, 360);
 }
 
 function drawParticles() {
   ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-
   particles = particles.filter((particle) => particle.life > 0);
 
   for (const particle of particles) {
     particle.life -= 1;
+    particle.prevX = particle.x;
+    particle.prevY = particle.y;
     particle.x += particle.vx;
     particle.y += particle.vy;
-    particle.vy += 0.006;
+    particle.vx *= particle.friction;
+    particle.vy = particle.vy * particle.friction + particle.gravity;
 
     const alpha = Math.max(particle.life / particle.maxLife, 0);
-    ctx.beginPath();
-    ctx.fillStyle = `rgba(${particle.color}, ${alpha * 0.82})`;
     ctx.shadowColor = `rgba(${particle.color}, ${alpha})`;
-    ctx.shadowBlur = 12;
+    ctx.shadowBlur = particle.trail ? 16 : 10;
+
+    if (particle.trail) {
+      ctx.beginPath();
+      ctx.strokeStyle = `rgba(${particle.color}, ${alpha * 0.42})`;
+      ctx.lineWidth = Math.max(particle.size * 0.72, 0.8);
+      ctx.moveTo(particle.prevX, particle.prevY);
+      ctx.lineTo(particle.x, particle.y);
+      ctx.stroke();
+    }
+
+    ctx.beginPath();
+    ctx.fillStyle = `rgba(${particle.color}, ${alpha * 0.9})`;
     ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
     ctx.fill();
   }
@@ -139,12 +208,12 @@ function drawParticles() {
 
   if (hasOpened) {
     burstTimer += 1;
-    if (burstTimer % 170 === 1) {
-      addBurst();
+    if (burstTimer % 210 === 1) {
+      addGoldBurst();
     }
   }
 
-  while (particles.length < 58) {
+  while (particles.length < 48) {
     particles.push(createParticle(Math.random() * window.innerWidth, window.innerHeight + 10));
   }
 
@@ -160,6 +229,12 @@ async function playMusic() {
     musicToggle.classList.add("is-paused");
     musicToggle.setAttribute("aria-label", "播放音乐");
   }
+}
+
+function pauseMusic() {
+  music.pause();
+  musicToggle.classList.add("is-paused");
+  musicToggle.setAttribute("aria-label", "播放音乐");
 }
 
 function pickFortune() {
@@ -226,11 +301,10 @@ musicToggle.addEventListener("click", async () => {
     return;
   }
 
-  music.pause();
-  musicToggle.classList.add("is-paused");
-  musicToggle.setAttribute("aria-label", "播放音乐");
+  pauseMusic();
 });
 
+blessingVideo.addEventListener("play", pauseMusic);
 drawButton.addEventListener("click", drawFortune);
 replayFireworks.addEventListener("click", showFireworks);
 
