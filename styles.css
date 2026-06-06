@@ -200,9 +200,9 @@ button {
 
 .music-toggle {
   position: fixed;
-  top: max(1rem, env(safe-area-inset-top));
-  right: 1rem;
-  z-index: 4;
+  top: 50%;
+  right: max(1rem, env(safe-area-inset-right));
+  z-index: 20;
   display: grid;
   width: 2.75rem;
   height: 2.75rem;
@@ -213,6 +213,8 @@ button {
   background: rgba(24, 18, 28, 0.68);
   box-shadow: 0 0.8rem 1.6rem rgba(0, 0, 0, 0.28);
   backdrop-filter: blur(16px);
+  transform: translateY(-50%) translateZ(0);
+  will-change: transform;
 }
 
 .music-bars {
@@ -827,14 +829,18 @@ button {
 
 @media (max-width: 719px) {
   .surprise {
-    gap: 0.85rem;
-    padding-top: max(0.85rem, env(safe-area-inset-top));
+    gap: 0.45rem;
+    padding-top: max(0.12rem, env(safe-area-inset-top));
+  }
+
+  .page.is-open .surprise {
+    transform: translateY(-1.2rem);
   }
 
   .cake {
     width: min(9.8rem, 44vw);
     height: 7.6rem;
-    margin-top: -0.35rem;
+    margin-top: 0;
   }
 
   .cake-body {
@@ -883,13 +889,14 @@ button {
 @media (max-height: 700px) {
   .surprise {
     align-content: start;
-    padding-top: 4.5rem;
+    padding-top: max(0.12rem, env(safe-area-inset-top));
     overflow-y: auto;
   }
 
   .cake {
     width: 9.5rem;
     height: 7.7rem;
+    margin-top: 0;
   }
 
   .cake-body {
