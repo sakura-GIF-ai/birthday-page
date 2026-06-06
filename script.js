@@ -63,6 +63,11 @@ function resizeCanvas() {
   ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
 }
 
+function lockMusicButton() {
+  const viewportHeight = window.visualViewport?.height || window.innerHeight;
+  musicToggle.style.top = `${Math.round(viewportHeight / 2)}px`;
+}
+
 function pickSparkColor() {
   const colors = [
     "255, 239, 180",
@@ -288,6 +293,7 @@ openButton.addEventListener("click", async () => {
 
   hasOpened = true;
   openButton.disabled = true;
+  document.body.classList.add("is-surprise-open");
   page.classList.add("is-open");
   opening.setAttribute("aria-hidden", "true");
   surprise.setAttribute("aria-hidden", "false");
@@ -311,8 +317,13 @@ replayFireworks.addEventListener("click", showFireworks);
 window.addEventListener("resize", () => {
   resizeCanvas();
   seedParticles();
+  lockMusicButton();
 });
+window.visualViewport?.addEventListener("resize", lockMusicButton);
+window.addEventListener("scroll", lockMusicButton, { passive: true });
+surprise.addEventListener("scroll", lockMusicButton, { passive: true });
 
 resizeCanvas();
+lockMusicButton();
 seedParticles();
 drawParticles();

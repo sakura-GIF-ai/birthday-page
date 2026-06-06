@@ -220,7 +220,7 @@ button {
   will-change: transform;
 }
 
-.page.is-open .music-toggle {
+body.is-surprise-open .music-toggle {
   opacity: 1;
   pointer-events: auto;
 }
