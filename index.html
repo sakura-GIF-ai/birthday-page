@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#111018" />
+    <title>生日快乐</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page" aria-live="polite">
+      <div class="ambient ambient-one"></div>
+      <div class="ambient ambient-two"></div>
+      <canvas id="sparkCanvas" class="spark-canvas" aria-hidden="true"></canvas>
+
+      <section class="opening" id="opening">
+        <p class="eyebrow">A little birthday secret</p>
+        <h1>今晚的星光，偷偷为你准备了一份惊喜</h1>
+        <button class="open-button" id="openButton" type="button">
+          <span>开启生日惊喜</span>
+        </button>
+      </section>
+
+      <section class="surprise" id="surprise" aria-hidden="true">
+        <button class="music-toggle" id="musicToggle" type="button" aria-label="暂停音乐">
+          <span class="music-bars" aria-hidden="true">
+            <i></i>
+            <i></i>
+            <i></i>
+          </span>
+        </button>
+
+        <div class="halo" aria-hidden="true"></div>
+        <div class="cake" aria-hidden="true">
+          <div class="flame"></div>
+          <div class="candle"></div>
+          <div class="cake-top"></div>
+          <div class="cake-body"></div>
+          <div class="plate"></div>
+        </div>
+
+        <div class="message">
+          <p class="tagline">For my dearest friend</p>
+          <h2>生日快乐！</h2>
+          <div class="wishes">
+            <p>愿新的一岁，你眼里有光，心里有梦，身边有爱。</p>
+            <p>愿你被温柔以待，也永远有勇气做自己。</p>
+            <p>愿快乐不止今天，好运不止生日。</p>
+            <p>你值得这世间所有明亮、热烈和偏爱。</p>
+            <p>张毓玲，生日快乐！</p>
+          </div>
+
+          <section class="video-letter" aria-label="生日祝福视频">
+            <p class="video-title">先收下这一段，只属于你的生日祝福</p>
+            <div class="video-frame">
+              <video class="blessing-video" controls preload="metadata" playsinline>
+                <source src="blessing.mp4" type="video/mp4" />
+              </video>
+              <div class="video-hint" aria-hidden="true">
+                <span class="play-mark"></span>
+                <span>Birthday Moment</span>
+              </div>
+            </div>
+          </section>
+
+          <div class="wish-draw" id="wishDraw">
+            <p class="draw-title">请抽取愿望签</p>
+            <div class="fortune-stage" id="fortuneStage" aria-live="polite">
+              <div class="envelope" aria-hidden="true">
+                <div class="envelope-back"></div>
+                <div class="envelope-card-preview">
+                  <span>Birthday Wish</span>
+                </div>
+                <div class="envelope-flap"></div>
+                <div class="envelope-front"></div>
+                <div class="envelope-seal"></div>
+                <div class="reveal-sparkle sparkle-one"></div>
+                <div class="reveal-sparkle sparkle-two"></div>
+                <div class="reveal-sparkle sparkle-three"></div>
+              </div>
+
+              <article class="fortune-card" id="fortuneCard" aria-hidden="true">
+                <span class="fortune-kicker">Birthday Wish</span>
+                <span class="fortune-label" id="fortuneLabel"></span>
+                <h3 id="fortuneText"></h3>
+                <p id="fortuneBlessing"></p>
+              </article>
+            </div>
+            <button class="draw-button" id="drawButton" type="button">抽一支属于你的生日愿望签</button>
+          </div>
+
+          <button class="replay-button" id="replayFireworks" type="button">再看一遍烟花</button>
+        </div>
+      </section>
+
+      <audio id="birthdayMusic" src="music.mp3" preload="auto" loop></audio>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
